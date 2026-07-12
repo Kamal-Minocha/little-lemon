@@ -43,13 +43,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 private fun isValidEmail(it: String): Boolean {
     return android.util.Patterns.EMAIL_ADDRESS.matcher(it).matches()
 }
 
 @Composable
-fun OnBoarding() {
+fun OnBoarding(navController: NavController) {
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -145,7 +147,7 @@ fun OnBoarding() {
         )
         Spacer(modifier = Modifier.weight(1f))
         Button(onClick = {
-            if(firstName.isEmpty() && lastName.isEmpty() && email.isEmpty()) {
+            if(firstName.isBlank() || lastName.isBlank() || email.isBlank()) {
                 Toast.makeText(
                     context,
                     "Registration unsuccessful. Please enter all data.",
@@ -157,6 +159,9 @@ fun OnBoarding() {
                 sharedPreferences.edit(commit = true) { putString(EMAIL, email) }
 
                 Toast.makeText(context, "Registration successful!", Toast.LENGTH_SHORT).show()
+
+//                navigate to home route after clicking the button using navController
+                navController.navigate(HomeDestination.route)
             }
         },
             colors = ButtonDefaults.buttonColors(
@@ -182,5 +187,6 @@ fun OnBoarding() {
 @Preview(showBackground = true)
 @Composable
 fun OnBoardingPreview() {
-    OnBoarding()
+    val navController = rememberNavController()
+    OnBoarding(navController)
 }
