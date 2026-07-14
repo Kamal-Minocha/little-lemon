@@ -2,6 +2,7 @@ package com.example.littlelemon
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,9 +12,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,6 +25,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -38,23 +43,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.compose.ui.platform.LocalInspectionMode
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.littlelemon.ui.theme.Karla
 import com.example.littlelemon.ui.theme.LittleLemonColor
 import com.example.littlelemon.ui.theme.MarkaziText
+import kotlin.collections.emptyList
 
 @Composable
-fun Home(navController: NavHostController) {
+fun Home(navController: NavHostController, database: AppDatabase) {
+    val databaseMenuItems by database.menuItemDao().getAll().observeAsState(initial = emptyList())
+
     Column {
         TopAppBar(navController)
-        HeroSection()
+        HeroSection(databaseMenuItems)
     }
 }
 
 @Composable
-fun HeroSection() {
+fun HeroSection(menuItemsLocal: List<MenuItemRoom>) {
     var searchPhrase by remember { mutableStateOf("") }
+    var menuItems = menuItemsLocal
+    var selectedCategory by remember { mutableStateOf("") }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -129,6 +140,80 @@ fun HeroSection() {
                 cursorColor = LittleLemonColor.charcoal
             )
         )
+        if(searchPhrase.isNotEmpty()) {
+            menuItems = menuItems.filter { it.title.contains(searchPhrase, ignoreCase = true) }
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .background(LittleLemonColor.cloud)
+        ) {
+            val scrollState = rememberScrollState()
+
+            Text(
+                text = stringResource(R.string.order_delivery),
+                modifier = Modifier.padding(top = 15.dp)
+            )
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp)
+                    .horizontalScroll(scrollState)
+            ) {
+                Button(
+                    onClick = {
+                        selectedCategory = "starters"
+                    },
+                    modifier = Modifier.height(40.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.category_starters),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+                Button(
+                    onClick = {
+                        selectedCategory = "mains"
+                    },
+                    modifier = Modifier.height(40.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.category_mains),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+                Button(
+                    onClick = {
+                        selectedCategory = "desserts"
+                    },
+                    modifier = Modifier.height(40.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.category_desserts),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+                Button(
+                    onClick = {
+                        selectedCategory = "drinks"
+                    },
+                    modifier = Modifier.height(40.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.category_drinks),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+            if(selectedCategory.isNotEmpty()) {
+                menuItems = menuItems.filter { it.category.contains(selectedCategory) }
+            }
+            MenuItems(menuItems)
+        }
     }
 }
 
@@ -138,7 +223,7 @@ private fun MenuItems(items: List<MenuItemRoom>) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 20.dp)
+            .padding(top = 10.dp)
     ) {
         items(
             items = items,
@@ -172,21 +257,38 @@ private fun MenuItems(items: List<MenuItemRoom>) {
                             fontWeight = FontWeight.Bold
                         )
                     }
-                    GlideImage(
-                        model = menuItem.image,
-                        contentDescription = stringResource(R.string.menu_item_image_description),
-                    )
+
+                    if (LocalInspectionMode.current) {
+                        Image(
+                            painter = painterResource(R.drawable.hero_image),
+                            contentDescription = stringResource(R.string.menu_item_image_description),
+                            modifier = Modifier
+                                .size(100.dp),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+                        GlideImage(
+                            model = menuItem.image,
+                            contentDescription = stringResource(R.string.menu_item_image_description),
+                            modifier = Modifier
+                                .size(100.dp),
+                            contentScale = ContentScale.Crop,
+                            requestBuilderTransform = {
+                                it.placeholder(R.drawable.hero_image).error(R.drawable.hero_image)
+                            }
+                        )
+                    }
                 }
             }
         )
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun HeroSectionPreview() {
-    HeroSection()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun HeroSectionPreview() {
+//    HeroSection()
+//}
 
 @Preview(showBackground = true)
 @Composable

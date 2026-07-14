@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -59,6 +58,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navHostController = rememberNavController()
+                    NavigationComposable(navController = navHostController, database)
                 }
             }
         }
@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
 
     private fun saveMenuToDatabase(fetchMenu: List<MenuItemNetwork>) {
         val menuItemsRoom = fetchMenu.map { it.toMenuItemRoom() }
-        database.menuItemDao().insertAll(menuItemsRoom)
+        database.menuItemDao().insertAll(*menuItemsRoom.toTypedArray())
     }
 }
 

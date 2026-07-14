@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -82,7 +83,7 @@ fun OnBoarding(navController: NavController) {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Let's get to know you",
+                text = stringResource(R.string.let_s_get_to_know_you),
                 fontFamily = FontFamily(Font(R.font.karla_regular)),
                 style = MaterialTheme.typography.headlineSmall,
                 color = Color.White

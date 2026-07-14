@@ -17,14 +17,16 @@ data class MenuItemNetwork(
     val price: String,
     val image: String,
     val category: String
-)
+) {
+    fun toMenuItemRoom() = MenuItemRoom(
+        id = id,
+        title = title,
+        price = price.toDoubleOrNull() ?: 0.0,
+        desc = description,
+        category = category,
+        image = image
+    )
+}
 
-fun MenuItemNetwork.toMenuItemRoom() = MenuItemRoom(
-    id = id,
-    title = title,
-    price = price.toDoubleOrNull() ?: 0.0,
-    desc = description,
-    category = category,
-    image = image
-)
+
 

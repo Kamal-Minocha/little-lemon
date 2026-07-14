@@ -6,5 +6,11 @@
     <string name="search_placeholder">Enter search phrase</string>
     <string name="hero_image_description">Hero Image</string>
     <string name="menu_item_image_description">Menu Item Image</string>
-    <string name="price_format">$%.2f</string>
+    <string name="price_format">%.2f</string>
+    <string name="order_delivery">ORDER FOR DELIVERY!</string>
+    <string name="category_starters">Starters</string>
+    <string name="category_mains">Mains</string>
+    <string name="category_desserts">Desserts</string>
+    <string name="category_drinks">Drinks</string>
+    <string name="let_s_get_to_know_you">Let\'s get to know you</string>
 </resources>
