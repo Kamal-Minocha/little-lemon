@@ -13,7 +13,7 @@ fun NavigationComposable(navController: NavHostController, database: AppDatabase
 
     NavHost(
         navController = navController,
-        startDestination = if(hasUserData) HomeDestination.route else OnBoardingDestination.route
+        startDestination = if(hasUserData) OnBoardingDestination.route else HomeDestination.route
     ) {
         composable(OnBoardingDestination.route) { OnBoarding(navController = navController) }
         composable(HomeDestination.route) { Home(navController = navController, database) }

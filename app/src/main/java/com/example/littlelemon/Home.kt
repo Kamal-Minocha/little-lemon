@@ -143,77 +143,76 @@ fun HeroSection(menuItemsLocal: List<MenuItemRoom>) {
         if(searchPhrase.isNotEmpty()) {
             menuItems = menuItems.filter { it.title.contains(searchPhrase, ignoreCase = true) }
         }
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .background(LittleLemonColor.cloud)
+    ) {
+        val scrollState = rememberScrollState()
 
-        Column(
+        Text(
+            text = stringResource(R.string.order_delivery),
+            modifier = Modifier.padding(top = 15.dp)
+        )
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .background(LittleLemonColor.cloud)
+                .padding(vertical = 10.dp)
+                .horizontalScroll(scrollState)
         ) {
-            val scrollState = rememberScrollState()
-
-            Text(
-                text = stringResource(R.string.order_delivery),
-                modifier = Modifier.padding(top = 15.dp)
-            )
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 10.dp)
-                    .horizontalScroll(scrollState)
+            Button(
+                onClick = {
+                    selectedCategory = "starters"
+                },
+                modifier = Modifier.height(40.dp)
             ) {
-                Button(
-                    onClick = {
-                        selectedCategory = "starters"
-                    },
-                    modifier = Modifier.height(40.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.category_starters),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-                Button(
-                    onClick = {
-                        selectedCategory = "mains"
-                    },
-                    modifier = Modifier.height(40.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.category_mains),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-                Button(
-                    onClick = {
-                        selectedCategory = "desserts"
-                    },
-                    modifier = Modifier.height(40.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.category_desserts),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-                Button(
-                    onClick = {
-                        selectedCategory = "drinks"
-                    },
-                    modifier = Modifier.height(40.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.category_drinks),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
+                Text(
+                    text = stringResource(R.string.category_starters),
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
-            if(selectedCategory.isNotEmpty()) {
-                menuItems = menuItems.filter { it.category.contains(selectedCategory) }
+            Button(
+                onClick = {
+                    selectedCategory = "mains"
+                },
+                modifier = Modifier.height(40.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.category_mains),
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
-            MenuItems(menuItems)
+            Button(
+                onClick = {
+                    selectedCategory = "desserts"
+                },
+                modifier = Modifier.height(40.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.category_desserts),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+            Button(
+                onClick = {
+                    selectedCategory = "drinks"
+                },
+                modifier = Modifier.height(40.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.category_drinks),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
+        if(selectedCategory.isNotEmpty()) {
+            menuItems = menuItems.filter { it.category.contains(selectedCategory) }
+        }
+        MenuItems(menuItems)
     }
 }
 
@@ -258,37 +257,22 @@ private fun MenuItems(items: List<MenuItemRoom>) {
                         )
                     }
 
-                    if (LocalInspectionMode.current) {
-                        Image(
-                            painter = painterResource(R.drawable.hero_image),
-                            contentDescription = stringResource(R.string.menu_item_image_description),
-                            modifier = Modifier
-                                .size(100.dp),
-                            contentScale = ContentScale.Crop
-                        )
-                    } else {
-                        GlideImage(
-                            model = menuItem.image,
-                            contentDescription = stringResource(R.string.menu_item_image_description),
-                            modifier = Modifier
-                                .size(100.dp),
-                            contentScale = ContentScale.Crop,
-                            requestBuilderTransform = {
-                                it.placeholder(R.drawable.hero_image).error(R.drawable.hero_image)
-                            }
-                        )
-                    }
+                    GlideImage(
+                        model = menuItem.image,
+                        contentDescription = stringResource(R.string.menu_item_image_description),
+                        modifier = Modifier
+                            .size(100.dp),
+                        contentScale = ContentScale.Crop,
+                        requestBuilderTransform = {
+                            it.placeholder(R.drawable.hero_image).error(R.drawable.hero_image)
+                        }
+                    )
                 }
             }
         )
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun HeroSectionPreview() {
-//    HeroSection()
-//}
 
 @Preview(showBackground = true)
 @Composable

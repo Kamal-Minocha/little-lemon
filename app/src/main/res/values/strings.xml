@@ -13,4 +13,11 @@
     <string name="category_desserts">Desserts</string>
     <string name="category_drinks">Drinks</string>
     <string name="let_s_get_to_know_you">Let\'s get to know you</string>
+    <string name="personal_information">Personal information</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="log_out">Log out</string>
+    <string name="profile_image_description">Profile Image</string>
+    <string name="profile_logo_description">Profile Logo</string>
 </resources>
